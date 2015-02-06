@@ -4,16 +4,14 @@
 #include <GL\freeglut.h>
 #include <iostream>
 #include <stdlib.h>
+#include <stdio.h>
 #include <vector>
 #include <algorithm>
 #include <math.h>
 #include <random>
 
 using namespace std;
- 
-#define DEF_floorGridScale  1.0
-#define DEF_floorGridXSteps 10.0
-#define DEF_floorGridZSteps 10.0
+
 #define B 0x100
 #define BM 0xff
 #define N 0x1000
@@ -25,13 +23,9 @@ using namespace std;
 	r0 = t - (int)t;\
 	r1 = r0 - 1.;
 
-
 static void init_noise(void);
-
 static int p[B + B + 2];
-static float g3[B + B + 2][3];
 static float g2[B + B + 2][2];
-static float g1[B + B + 2];
 static int start = 1;
 #define s_curve(t) ( t * t * (3. - 2. * t) )
 
@@ -40,56 +34,16 @@ static int start = 1;
 float speed = 0.5f;
 float length = 3.0f;
 float amplitude = 0.4f;
-float frequency = 2.0F;
+float frequency = (2.0*3.14)/length;
 float amplitude_noise = 30.0f;
 float offset_noise = 0.5f;
 float height_noise = 1.0f;
-double size_turb = 50.0;
+double size_turb = 16.0;
  
-GLfloat variableKnots[25];
-GLfloat ctlpoints[21][21][3];
+float variableKnots[25] = {0.0, 0.0,0.0,0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0,16.0,17.0,18.0,18.0,18.0,18.0};
+float ctlpoints[21][21][3];
 GLUnurbsObj *theNurb;
-float time = 1000.0;
- 
-void ejesCoordenada() {
-     
-    glLineWidth(2.5);
-    glBegin(GL_LINES);
-        glColor3f(1.0,0.0,0.0);
-        glVertex2f(0,10);
-        glVertex2f(0,-10);
-        glColor3f(0.0,0.0,1.0);
-        glVertex2f(10,0);
-        glVertex2f(-10,0);
-    glEnd();
- 
-    glLineWidth(1.5);
-    int i;
-    glColor3f(0.0,1.0,0.0);
-    glBegin(GL_LINES);
-        for(i = -10; i <=10; i++){
-            if (i!=0) {    
-                if ((i%2)==0){ 
-                    glVertex2f(i,0.4);
-                    glVertex2f(i,-0.4);
- 
-                    glVertex2f(0.4,i);
-                    glVertex2f(-0.4,i);
-                }else{
-                    glVertex2f(i,0.2);
-                    glVertex2f(i,-0.2);
- 
-                    glVertex2f(0.2,i);
-                    glVertex2f(-0.2,i);
- 
-                }
-            }
-        }
-         
-    glEnd();
- 
-    glLineWidth(1.0);
-}
+float time = 2.0;
  
 void changeViewport(int w, int h) {
      
@@ -112,8 +66,10 @@ static void normalize2(float v[2])
 	float s;
 
 	s = sqrt(v[0] * v[0] + v[1] * v[1]);
-	v[0] = v[0] / s;
-	v[1] = v[1] / s;
+	if(s != 0){
+		v[0] = v[0] / s;
+		v[1] = v[1] / s;
+	}
 }
 
 static void normalize3(float v[3])
@@ -132,7 +88,6 @@ float noise2(float vec[2])
 	int bx0, bx1, by0, by1, b00, b10, b01, b11;
 	float rx0, rx1, ry0, ry1, *q, sx, sy, a, b, t, u, v;
 	register int i, j;
-	int start = 1;
 
 	if (start) {
 		start = 0;
@@ -167,9 +122,9 @@ float noise2(float vec[2])
 }
 
 
-double turbulence(float x, float z, double size)
+float turbulence(float x, float z, double size)
 {
-    double value = 0.0, initialSize = size;
+    float value = 0.0, initialSize = size;
 	float datos[2];
     
     while(size >= 1)
@@ -182,28 +137,22 @@ double turbulence(float x, float z, double size)
     
     return(128.0 * value / initialSize);
 }
-float scalarP(vector<float> vect1, vector<float> vect2) {
+float scalarP(float vect1[], float vect2[]) {
 
 	return vect1[0]*vect2[0]+vect1[1]*vect2[1];
 
 }
 
-GLfloat olaFunc(float x, float z, float t) {
-	vector<float> diCircular(2,0);
+float olaFunc(float x, float z, float t) {
+	float diCircular[2] = {0,0};
 	float sq = sqrt((x*x)+(z*z));
-	if(x != 0) diCircular[0] = (x)/sq;
-	//if(y != 0) diCircular[1] = y/abs(y);
-	if(z != 0) diCircular[1] = (z)/sq;
+	if(sq != 0) diCircular[0] = (x)/sq;
+	if(sq != 0) diCircular[1] = (z)/sq;
 
-	vector<float> points(2,0);
-	points[0] = x;
-	points[1] = z;
+	float points[2] = {x,z};
 
-	float scalar = scalarP(diCircular, points);
-	//cout << x << ", " << z << " : " << scalar << endl;
-	float res =	amplitude * sin(scalar*frequency+t*speed);
-	//cout << "Resultado ecuación "<< res;
-	return GLfloat(res); 
+	float scalar = scalarP(diCircular, points);	
+	return amplitude*sin(scalar*frequency+t*speed); 
 }
  
 void init_surface() {
@@ -211,12 +160,57 @@ void init_surface() {
 	{
 		for (int j = -10; j < 11; j++)
 		{
-			ctlpoints[i+10][j+10][0] = GLfloat(i);
-			ctlpoints[i+10][j+10][1] = olaFunc(float(i), float(j), time)+height_noise*0.005*turbulence(float(i), float(j), size_turb);
-			ctlpoints[i+10][j+10][2] = GLfloat(j);
+			ctlpoints[i+10][j+10][0] = float(i);
+			//ctlpoints[i+10][j+10][1] = 0.0;//olaFunc(float(i), float(j), time)+height_noise*0.005*turbulence(float(i), float(j), size_turb);
+			ctlpoints[i+10][j+10][2] = float(j);
 		}
 	}
 }
+
+
+void ciclo_surface() {
+	for (int i = -10; i < 11; i++)
+	{
+		for (int j = -10; j < 11; j++)
+		{
+
+			//Parte de la ola
+			float diCircX = 0, diCircZ = 0;
+			float speedy = speed*frequency;
+			float sq = sqrt((i*i)+(j*j));
+			if(sq != 0) {
+				diCircX = (i)/sq;
+				diCircZ = (j)/sq;
+			}
+
+			float scalar = diCircX*i+diCircZ*j;
+			//Fin de parte de la ola
+
+			//Turbulence
+			float value = 0.0, initialSize = size_turb;
+			float datos[2];
+			float size_turb_var = size_turb; 
+    
+			while(size_turb_var >= 1)
+			{
+				datos[0] = (i*amplitude_noise+offset_noise)/size_turb_var;
+				datos[1] = (j*amplitude_noise+offset_noise)/size_turb_var;
+
+				//noise2
+
+				//Fin noise2
+
+				value += noise2(datos) * size_turb_var;
+				size_turb_var /= 2.0;
+			}
+			//Fin Turbulence
+			
+			ctlpoints[i+10][j+10][1] = (amplitude*sin(scalar*frequency+time*speedy))+height_noise*0.005*(128.0 * value / initialSize);
+		}
+	}
+}
+
+
 
 static void init_noise(void)
 {
@@ -225,15 +219,9 @@ static void init_noise(void)
 	for (i = 0 ; i < B ; i++) {
 		p[i] = i;
 
-		g1[i] = (float)((rand() % (B + B)) - B) / B;
-
 		for (j = 0 ; j < 2 ; j++)
 			g2[i][j] = (float)((rand() % (B + B)) - B) / B;
 		normalize2(g2[i]);
-
-		for (j = 0 ; j < 3 ; j++)
-			g3[i][j] = (float)((rand() % (B + B)) - B) / B;
-		normalize3(g3[i]);
 	}
 
 	while (--i) {
@@ -244,24 +232,20 @@ static void init_noise(void)
 
 	for (i = 0 ; i < B + 2 ; i++) {
 		p[B + i] = p[i];
-		g1[B + i] = g1[i];
 		for (j = 0 ; j < 2 ; j++)
 			g2[B + i][j] = g2[i][j];
-		for (j = 0 ; j < 3 ; j++)
-			g3[B + i][j] = g3[i][j];
 	}
 }
 
 void animacion(int value) {
-	time-=0.3;
-    init_surface();
-    glutTimerFunc(17,animacion,1);
+    glutTimerFunc(100,animacion,1);
     glutPostRedisplay();
-     
+    time-=0.5;
+    ciclo_surface();
 }
  
 void init(){
-	variableKnots[0] = 0.0;
+	/*variableKnots[0] = 0.0;
 	variableKnots[1] = 0.0;
 	variableKnots[2] = 0.0;
 	variableKnots[3] = 0.0;
@@ -274,7 +258,7 @@ void init(){
 	variableKnots[21] = val;
 	variableKnots[22] = val;
 	variableKnots[23] = val;
-	variableKnots[24] = val;
+	variableKnots[24] = val;*/
 
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
@@ -283,6 +267,7 @@ void init(){
 	glEnable(GL_NORMALIZE);
  
 	init_surface();
+	//init_noise();
 	theNurb = gluNewNurbsRenderer();
 	gluNurbsProperty(theNurb, GLU_SAMPLING_TOLERANCE, 15.0);
 	gluNurbsProperty(theNurb, GLU_DISPLAY_MODE, GLU_FILL);
@@ -295,7 +280,7 @@ void Keyboard(unsigned char key, int x, int y)
 {
   switch (key)
   {
-    case 27:            
+   case 27:            
         exit (0);
         break;
 	case 'a':
@@ -315,9 +300,6 @@ void render(){
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
  
-    /*GLfloat zExtent, xExtent, xLocal, zLocal;
-    int loopX, loopZ;
- */
     glLoadIdentity ();                      
     gluLookAt (25.0, 12.0, 4.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
      
@@ -344,36 +326,6 @@ void render(){
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);  
  
  
-     
-    // Render Grid
-    /*glDisable(GL_LIGHTING);
-    glLineWidth(1.0);
-    glPushMatrix();
-    glRotatef(90,1.0,0.0,0.0);
-    glColor3f( 0.0, 0.7, 0.7 );
-    glBegin( GL_LINES );
-    zExtent = DEF_floorGridScale * DEF_floorGridZSteps;
-    for(loopX = -DEF_floorGridXSteps; loopX <= DEF_floorGridXSteps; loopX++ )
-    {
-    xLocal = DEF_floorGridScale * loopX;
-    glVertex3f( xLocal, -zExtent, 0.0 );
-    glVertex3f( xLocal, zExtent,  0.0 );
-    }
-    xExtent = DEF_floorGridScale * DEF_floorGridXSteps;
-    for(loopZ = -DEF_floorGridZSteps; loopZ <= DEF_floorGridZSteps; loopZ++ )
-    {
-    zLocal = DEF_floorGridScale * loopZ;
-    glVertex3f( -xExtent, zLocal, 0.0 );
-    glVertex3f(  xExtent, zLocal, 0.0 );
-    }
-    glEnd();
-    ejesCoordenada();
-    glPopMatrix();
-    glEnable(GL_LIGHTING);*/
-    // Fin Grid
-     
- 
- 
     //Suaviza las lineas
     glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -382,28 +334,14 @@ void render(){
     glPushMatrix();
  
     gluBeginSurface(theNurb);
-		gluNurbsSurface(theNurb, 25, variableKnots, 25, variableKnots, 21 * 3, 3, &ctlpoints[0][0][0], 4, 4, GL_MAP2_VERTEX_3);
+		gluNurbsSurface(theNurb, 
+                   25, variableKnots, 25, variableKnots,
+                   21 * 3, 3, (GLfloat *)&ctlpoints, 
+                   4, 4, GL_MAP2_VERTEX_3);
     gluEndSurface(theNurb);
      
     glPopMatrix();
-     
-     
-    /* Muestra los puntos de control */
-    /*
-    int i,j;
-    glPointSize(5.0);
-    glDisable(GL_LIGHTING);
-    glColor3f(1.0, 1.0, 0.0);
-    glBegin(GL_POINTS);
-    for (i = 0; i <21; i++) {
-        for (j = 0; j < 21; j++) {
-            glVertex3f(ctlpoints[i][j][0],  ctlpoints[i][j][1], ctlpoints[i][j][2]);
-        }
-    }
-    glEnd();
-    glEnable(GL_LIGHTING);*/
-    
-         
+             
  
     glDisable(GL_BLEND);
     glDisable(GL_LINE_SMOOTH);

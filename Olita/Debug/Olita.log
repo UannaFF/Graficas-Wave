@@ -1,40 +1,30 @@
-﻿Build started 04/02/2015 23:20:42.
+﻿Build started 06/02/2015 17:34:11.
      1>Project "C:\Users\ani\Documents\Visual Studio 2012\Projects\Olita\Olita\Olita.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I"C:\Users\ani\Documents\USB\Computación Gráfica\Opengl\freeglut\include" /I"C:\Users\ani\Documents\USB\Computación Gráfica\Opengl\glew-1.7.0\include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
          main.cpp
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(73): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(73): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(74): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(74): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(76): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(76): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(77): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(77): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(79): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(79): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(80): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(80): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(82): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(82): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(83): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(83): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(96): warning C4101: 'aspectratio' : unreferenced local variable
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(142): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(143): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(153): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(154): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(177): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(178): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(215): warning C4244: '=' : conversion from 'double' to 'GLfloat', possible loss of data
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(256): warning C4305: '-=' : truncation from 'double' to 'float'
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(302): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(305): warning C4305: '-=' : truncation from 'double' to 'float'
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(327): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(328): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(336): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(337): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
-     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(338): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(37): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(50): warning C4101: 'aspectratio' : unreferenced local variable
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(97): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(98): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(108): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(109): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(127): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(132): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(133): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(134): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(138): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(180): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(190): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(192): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(208): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(287): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(290): warning C4305: '-=' : truncation from 'double' to 'float'
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(309): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(310): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(318): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(319): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
+     1>c:\users\ani\documents\visual studio 2012\projects\olita\olita\main.cpp(320): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ani\Documents\Visual Studio 2012\Projects\Olita\Debug\Olita.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\ani\Documents\USB\Computación Gráfica\Opengl\freeglut\lib" /LIBPATH:"C:\Users\ani\Documents\USB\Computación Gráfica\Opengl\glew-1.7.0\lib" freeglut.lib glew32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\ani\Documents\Visual Studio 2012\Projects\Olita\Debug\Olita.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ani\Documents\Visual Studio 2012\Projects\Olita\Debug\Olita.lib" /MACHINE:X86 Debug\main.obj
          Olita.vcxproj -> C:\Users\ani\Documents\Visual Studio 2012\Projects\Olita\Debug\Olita.exe
@@ -42,4 +32,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.59
+Time Elapsed 00:00:01.62
