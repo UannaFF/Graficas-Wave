@@ -39,6 +39,10 @@ float amplitude_noise = 30.0f;
 float offset_noise = 0.5f;
 float height_noise = 1.0f;
 double size_turb = 16.0;
+bool pausa = false, ruido = true, ola = true;
+
+float centroX = 0.0;
+float centroZ = 0.0;
  
 float variableKnots[25] = {0.0, 0.0,0.0,0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0,16.0,17.0,18.0,18.0,18.0,18.0};
 float ctlpoints[21][21][3];
@@ -169,43 +173,61 @@ void init_surface() {
 
 
 void ciclo_surface() {
-	for (int i = -10; i < 11; i++)
+	float diCircX = 0.0, diCircZ = 0.0;
+	float speedy = 0.0;
+	float sq = 0.0;
+	float scalar = 0.0;
+	float value = 0.0, initialSize = size_turb;
+	float datos[2];
+	float size_turb_var = size_turb;
+	float ruido_res = 0.0, ola_res = 0.0;
+	float posX = 0.0, posZ = 0.0;
+	for (int i = 0; i < 21; i++)
 	{
-		for (int j = -10; j < 11; j++)
+		for (int j = 0; j < 21; j++)
 		{
-
+			posX = ctlpoints[i][j][0];
+			posZ = ctlpoints[i][j][2];
 			//Parte de la ola
-			float diCircX = 0, diCircZ = 0;
-			float speedy = speed*frequency;
-			float sq = sqrt((i*i)+(j*j));
-			if(sq != 0) {
-				diCircX = (i)/sq;
-				diCircZ = (j)/sq;
-			}
+			if(ola) {
+				diCircX = posX-centroX; 
+				diCircZ = posZ-centroZ;
+				speedy = speed*frequency;
+				sq = sqrt((posX*posX)+(posZ*posZ));
+				if(sq != 0) {
+					diCircX /= sq;
+					diCircZ /= sq;
+				}
 
-			float scalar = diCircX*i+diCircZ*j;
+				scalar = diCircX*posX+diCircZ*posZ;
+				ola_res = (amplitude*sin(scalar*frequency+time*speedy));
+			}
 			//Fin de parte de la ola
 
 			//Turbulence
-			float value = 0.0, initialSize = size_turb;
-			float datos[2];
-			float size_turb_var = size_turb; 
+			if(ruido) {
+				value = 0.0;
+				initialSize = size_turb;
+				size_turb_var = size_turb; 
     
-			while(size_turb_var >= 1)
-			{
-				datos[0] = (i*amplitude_noise+offset_noise)/size_turb_var;
-				datos[1] = (j*amplitude_noise+offset_noise)/size_turb_var;
+				while(size_turb_var >= 1)
+				{
+					datos[0] = (posX*amplitude_noise+offset_noise)/size_turb_var;
+					datos[1] = (posZ*amplitude_noise+offset_noise)/size_turb_var;
 
-				//noise2
+					//noise2
 
-				//Fin noise2
+					//Fin noise2
 
-				value += noise2(datos) * size_turb_var;
-				size_turb_var /= 2.0;
+					value += noise2(datos) * size_turb_var;
+					size_turb_var /= 2.0;
+				}
+				ruido_res = height_noise*0.005*(128.0 * value / initialSize);
+
 			}
 			//Fin Turbulence
 			
-			ctlpoints[i+10][j+10][1] = (amplitude*sin(scalar*frequency+time*speedy))+height_noise*0.005*(128.0 * value / initialSize);
+			ctlpoints[i][j][1] = ola_res+ruido_res;
 		}
 	}
 }
@@ -238,10 +260,12 @@ static void init_noise(void)
 }
 
 void animacion(int value) {
-    glutTimerFunc(100,animacion,1);
-    glutPostRedisplay();
-    time-=0.5;
-    ciclo_surface();
+	if(!pausa){
+		glutPostRedisplay();
+		time-=0.5;
+		ciclo_surface();
+	}
+	glutTimerFunc(10,animacion,1);
 }
  
 void init(){
@@ -289,7 +313,84 @@ void Keyboard(unsigned char key, int x, int y)
 	case 'z':
 		amplitude -= 0.1;
 		break;
-     
+	case 's':
+		length += 0.1;
+		break;
+	case 'x':
+		length -= 0.1;
+		break;
+	case 'd':
+		speed += 0.1;
+		break;
+	case 'c':
+		speed -= 0.1;
+		break;
+	case 'f':
+		//decaimiento aumenta 0.01
+		break;
+	case 'v':
+		//baja decaimiento 0.01
+		break;
+	case 'g':
+		amplitude_noise += 0.01;
+		break;
+	case 'b':
+		amplitude_noise -= 0.01;
+		break;
+	case 'h':
+		offset_noise += 0.01;
+		break;
+	case 'n':
+		offset_noise -= 0.01;
+		break;
+	case 'j':
+		height_noise += 0.01;
+		break;
+	case 'm':
+		height_noise -= 0.01;
+		break;
+	case 't':
+		size_turb += 1.0;
+		break;
+	case 'y':
+		size_turb -= 1.0;
+		break;
+	//0.001, amplitud de la curva cuadratica
+	case 'u':
+		break;
+	case 'i':
+		break;
+	//0.1, traslación de x de la curva cuadratica
+	case 'o':
+		break;
+	case 'l':
+		break;
+	//0.1, traslada el centro en el eje x de la ola.
+	case 'q':
+		centroX += 0.1;
+		break;
+	case 'w':
+		centroX -= 0.1;
+		break;
+	case 'e':
+		centroZ += 0.1;
+		break;
+	case 'r':
+		centroZ -= 0.1;
+		break;
+	case '1':
+		if(pausa) pausa = false;
+		else pausa = true;
+		break;
+	case '2':
+		if(ruido) ruido = false;
+		else ruido = true;
+		break;
+	case '3':
+		if(ola) ola = false;
+		else ola = true;
+		break;
+
   }
 }
 
