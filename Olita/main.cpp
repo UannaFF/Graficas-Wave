@@ -31,6 +31,7 @@ static int start = 1;
 
 #define lerp(t, a, b) ( a + t * (b - a) )
 
+float cuadraticaA = 0.0, cuadraticaB = 0.0;
 float speed = 0.5f;
 float length = 3.0f;
 float amplitude = 0.4f;
@@ -38,6 +39,8 @@ float frequency = (2.0*3.14)/length;
 float amplitude_noise = 30.0f;
 float offset_noise = 0.5f;
 float height_noise = 1.0f;
+float decayW = 1.0f;
+float amplitude_deform = 0.0; 
 double size_turb = 16.0;
 bool pausa = false, ruido = true, ola = true;
 
@@ -182,6 +185,8 @@ void ciclo_surface() {
 	float size_turb_var = size_turb;
 	float ruido_res = 0.0, ola_res = 0.0;
 	float posX = 0.0, posZ = 0.0;
+	float cuad = 0.0;
+	float dist = 0.0;
 	for (int i = 0; i < 21; i++)
 	{
 		for (int j = 0; j < 21; j++)
@@ -190,6 +195,8 @@ void ciclo_surface() {
 			posZ = ctlpoints[i][j][2];
 			//Parte de la ola
 			if(ola) {
+				dist = sqrt((posX-centroX)*(posX-centroX)+(posZ-centroZ)*(posZ-centroZ));
+				if(dist == 0.0) dist = 1.0;
 				diCircX = posX-centroX; 
 				diCircZ = posZ-centroZ;
 				speedy = speed*frequency;
@@ -200,8 +207,10 @@ void ciclo_surface() {
 				}
 
 				scalar = diCircX*posX+diCircZ*posZ;
-				ola_res = (amplitude*sin(scalar*frequency+time*speedy));
+				//if(decayW == 0.0) decayW == 0.1;
+				ola_res = ((amplitude*pow(1/dist,decayW))*sin(scalar*frequency+time*speedy));
 			}
+			cuad = cuadraticaA*posZ*posZ+cuadraticaB*posZ + 0.0;
 			//Fin de parte de la ola
 
 			//Turbulence
@@ -227,7 +236,7 @@ void ciclo_surface() {
 			}
 			//Fin Turbulence
 			
-			ctlpoints[i][j][1] = ola_res+ruido_res;
+			ctlpoints[i][j][1] = ola_res+ruido_res+cuad;
 		}
 	}
 }
@@ -327,9 +336,12 @@ void Keyboard(unsigned char key, int x, int y)
 		break;
 	case 'f':
 		//decaimiento aumenta 0.01
+		decayW += 0.01;
+		cout << decayW << "--";
 		break;
 	case 'v':
 		//baja decaimiento 0.01
+		decayW -= 0.01;
 		break;
 	case 'g':
 		amplitude_noise += 0.01;
@@ -357,13 +369,17 @@ void Keyboard(unsigned char key, int x, int y)
 		break;
 	//0.001, amplitud de la curva cuadratica
 	case 'u':
+		cuadraticaA += 0.001;
 		break;
 	case 'i':
+		cuadraticaA -= 0.001;
 		break;
 	//0.1, traslación de x de la curva cuadratica
 	case 'o':
+		cuadraticaB += 0.1;
 		break;
 	case 'l':
+		cuadraticaB -= 0.1;
 		break;
 	//0.1, traslada el centro en el eje x de la ola.
 	case 'q':
